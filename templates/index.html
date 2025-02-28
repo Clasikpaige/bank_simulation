@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5>Account Summary</h5>
+            </div>
+            <div class="card-body">
+                <h4>Balance: ₹{{ "%.2f"|format(balance) }}</h4>
+                <a href="{{ url_for('transaction') }}" class="btn btn-success mt-3">New Transaction</a>
+            </div>
+        </div>
+
+        <div class="card mt-4 shadow">
+            <div class="card-header bg-info text-white">
+                <h5>Recent Transactions</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transactions %}
+                        <tr>
+                            <td>{{ t.timestamp.strftime('%d %b %Y') }}</td>
+                            <td><span class="badge bg-{{ 'success' if t.transaction_type == 'deposit' else 'danger' }}">
+                                {{ t.transaction_type|upper }}
+                            </span></td>
+                            <td>₹{{ "%.2f"|format(t.amount) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
